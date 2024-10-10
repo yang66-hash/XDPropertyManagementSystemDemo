@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @RestController
-@RequestMapping("user")
+@RequestMapping("house")
 public class HouseController {
 
     private final HouseService houseService;
