@@ -1,14 +1,14 @@
 # XDPropertyManagementSystemDemo
 This is a demo template based on SpringBoot3 in the background of property management system.
 
-## why build it?
+## Why build it?
 It is used as a study demo for Spring Boot3 Framework personally, which is still in development.
 
-## introduction to the project structure
+## Introduction to the project structure
 This part can refer to SpringBootStructure.md in resources directory.
 
 
-## how to build in local
+## How to build in local
 | environment requires | minimum version |
 |:--------------------:|:---------------:|
 |         Java         |       17        |
