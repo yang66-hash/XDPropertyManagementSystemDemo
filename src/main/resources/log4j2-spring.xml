@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+<!--     定义了格式化异常输出   -->
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+<!--      设置日志级别的显示格式。%5p表示日志级别（如 DEBUG、INFO、WARN 等）将会占用 5 个字符的位置，右对齐。如果级别名称长度小于 5，则会用空格填充  -->
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+<!--  定义日志日期的格式 yyyy: 四位数年份 MM: 两位数月份 dd: 两位数日期 HH: 两位数小时 mm: 两位数分钟（00-59）
+        SSS: 三位数毫秒（000-999）XXX: 时区偏移（例如东八区，+08:00）      -->
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
+<!--  定义控制台输出日志的整体格式
+        %clr{...}: 用于为输出内容添加颜色  如%clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} 将日期定义渲染为淡色，在视觉上进行弱化，与其他更重要的信息区分开来。
+        %d{...}: 用于输出当前日期，格式由 LOG_DATEFORMAT_PATTERN 定义
+        %pid: 进程 ID
+        [%15.15t]: %t当前线程名，第一个15指定字段的总宽度为15个字符 后面的 .15 表示最多输出15个字符，超过的部分会被截断 不足15，补空格 默认右对齐，想要左对齐使用负号- 如 %-15.15t
+        %c{1.}: c表示日志记录器的类名 {1.}类名仅显示最后一个部分 其他的只取一个字符 如c.x.c.UserController
+        %m: 日志消息
+        %n: 换行符
+        ${sys:...}: 读取系统属性。 最后的${sys:LOG_EXCEPTION_CONVERSION_WORD} 表示如果有异常信息，则使用 LOG_EXCEPTION_CONVERSION_WORD 定义的格式输出该异常信息 -->
+        <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${sys:LOG_LEVEL_PATTERN}} %clr{%pid}{magenta} %clr{---}{faint} %clr{${sys:LOGGED_APPLICATION_NAME:-}[%15.15t]}{faint} %clr{${sys:LOG_CORRELATION_PATTERN:-}}{faint}%clr{%-40.40c{2.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} %pid --- ${sys:LOGGED_APPLICATION_NAME:-}[%t] ${sys:LOG_CORRELATION_PATTERN:-}%-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+
+        <!-- 定义日志文件的路径以及名称 -->
+        <property name="FILE_OUTPUT_PATH" value="logs-log4j/" />
+        <property name="FILE_NAME" value="xindian-management-system" />
+    </Properties>
+    <Appenders>
+<!--        控制台实现和默认配置一样的日志格式输出-->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${sys:CONSOLE_LOG_PATTERN}" charset="${sys:CONSOLE_LOG_CHARSET}"/>
+            <filters>
+<!--                接受CONSOLE_LOG_THRESHOLD以上级别的日志（没找到该环境变量，默认DEBUG以上）-->
+                <ThresholdFilter level="${sys:CONSOLE_LOG_THRESHOLD:-DEBUG}"/>
+            </filters>
+        </Console>
+<!--        以filename命名，当Polices被满足生成新的日志文件，之前的将会被打包成filepattern中的.gz-->
+        <RollingFile name="RollingFile" fileName="${FILE_OUTPUT_PATH}/${FILE_NAME}-info.log" filePattern="${FILE_OUTPUT_PATH}/${FILE_NAME}-INFO-%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${FILE_LOG_PATTERN}" charset="UTF-8"/>
+            <filters>
+                <ThresholdFilter level="INFO"/>
+            </filters>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="24"/>
+                <!--size指定每个日志文件的最大大小（默认值：10MB）-->
+                <SizeBasedTriggeringPolicy size="8MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+
+        <!--错误存储-->
+        <RollingFile name="RollingFileError" fileName="${FILE_OUTPUT_PATH}/xindian-management-system-error.log" filePattern="${FILE_OUTPUT_PATH}/${FILE_NAME}-ERROR-%d{yyyy-MM-dd}.%i.gz">
+            <PatternLayout pattern="${FILE_LOG_PATTERN}" charset="UTF-8"/>
+            <filters>
+                <ThresholdFilter level="ERROR"/>
+            </filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="72"/>
+                <SizeBasedTriggeringPolicy size="8MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="7"/>
+        </RollingFile>
+
+    </Appenders>
+
+
+    <Loggers>
+<!--        生产环境建议调整为INFO，以避免生成过多的日志信息。同时关闭控制台输出，将日志输出到文件。 测试调试时可设置为DEBUG-->
+        <Root level="INFO">
+            <AppenderRef ref="Console" />
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="RollingFileError"/>
+        </Root>
+    </Loggers>
+</Configuration>
