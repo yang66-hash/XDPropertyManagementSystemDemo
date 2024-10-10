@@ -7,7 +7,7 @@ spring:
   # 配置数据库连接
   datasource:
     username: root
-    password: xymh0329.
+    password: root
     url: jdbc:mysql://127.0.0.1:3306/property_management_db?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
 
