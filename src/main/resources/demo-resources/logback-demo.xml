@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
+<!--    这是一个较为完整的logback日志框架的配置文件属性展示-->
     <!-- Spring Boot 默认日志配置 -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <!-- 日志文件输出位置 -->

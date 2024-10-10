@@ -25,13 +25,9 @@ public class UserController {
 
     }
 
-
     @GetMapping("getUserById")
     public ResponseDTO<User> getUserById(@RequestParam int id) {
-
         return ResponseDTO.success(userService.getUserById(id));
-
-
     }
 
 

@@ -26,3 +26,6 @@ then you can run the jar in target by command line
 java -jar XDPropertyManagementSystem-1.0-SNAPSHOT.jar
 ```
 or you can develop and run the application using development tools,such as Intellij IDEA.
+
+## Note
+All the files and directories containing 'demo' in this project are used for demonstration and study and are not included in the project structure based on Spring Boot.
